@@ -1,0 +1,25 @@
+.box-shadow{
+    box-shadow: 0px 5px 5px rgba(0, 0, 0 , 0.2);
+}
+/* Estilizar la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 12px; /* Ancho de la barra vertical */
+  height: 12px; /* Alto de la barra horizontal */
+}
+
+/* Estilizar el track (fondo de la barra) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 5px; 
+}
+
+/* Estilizar el thumb (la parte que se mueve) */
+::-webkit-scrollbar-thumb {
+  background: #54388432; 
+  border-radius: 5px; 
+}
+
+/* Estilizar el thumb cuando se pasa el cursor sobre él */
+::-webkit-scrollbar-thumb:hover {
+  background: #5438843d; 
+}
