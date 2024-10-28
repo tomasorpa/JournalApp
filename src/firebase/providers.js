@@ -3,7 +3,6 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,
   updateProfile,
 } from "firebase/auth";
 import { FirebaseAuth } from "./";
