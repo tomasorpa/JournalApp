@@ -13,7 +13,7 @@ export const JournalPage = () => {
   const { isSaving, active } = useSelector((state) => state.journal);
   return (
     <JournalLayout>
-      {(!!active) ? <NoteView /> : <NothingSelectedView />}
+      {!!active ? <NoteView /> : <NothingSelectedView />}
       <IconButton
         onClick={onClickNewNote}
         sx={{

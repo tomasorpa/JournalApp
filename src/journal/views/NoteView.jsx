@@ -1,27 +1,57 @@
-import { SaveOutlined } from "@mui/icons-material";
-import { Button, Grid, Typography, TextField } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import {
+  DeleteOutlined,
+  SaveOutlined,
+  UploadOutlined,
+} from "@mui/icons-material";
+import { Button, Grid, Typography, TextField, IconButton } from "@mui/material";
+import { useEffect, useMemo, useRef } from "react";
 import { ImageGallery } from "../components/ImageGallery";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "../../hooks";
-import { setActiveNote, startUpdatingNote } from "../../store";
+import {
+  setActiveNote,
+  startDeletingNote,
+  startUpdatingNote,
+  startUploadingFiles,
+} from "../../store";
+import Swal from "sweetalert2";
 
 export const NoteView = () => {
-  const { active: activeNote } = useSelector((state) => state.journal);
-  const { onInputChange, body, title, date,formState } = useForm(activeNote);
+  const { active: activeNote, savedMessage } = useSelector(
+    (state) => state.journal
+  );
+  const { onInputChange, body, title, date, formState } = useForm(activeNote);
   const formattedDate = useMemo(() => {
-    const newDate = new Date(date).toUTCString()
-    return newDate
-  }, [date])
+    const newDate = new Date(date).toUTCString();
+    return newDate;
+  }, [date]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setActiveNote(formState));
   }, [formState]);
-  const onUpdatingNote = () => {
-    dispatch(startUpdatingNote())
-  }
 
+  useEffect(() => {
+    if (savedMessage.length > 0) {
+      Swal.fire({
+        title: "Note saved!",
+        text: `${title} was successfully saved!`,
+        icon: "success",
+      });
+    }
+  }, [savedMessage]);
+
+  const onUpdatingNote = () => {
+    dispatch(startUpdatingNote());
+  };
+  const onFileInputChange = ({ target }) => {
+    if (target.files == 0) return;
+    dispatch(startUploadingFiles(target.files));
+  };
+  const fileInputRef = useRef();
+  const handleOnDeleteNote = () => {
+    dispatch(startDeletingNote());
+  };
   return (
     <Grid
       container
@@ -32,8 +62,40 @@ export const NoteView = () => {
         <Typography fontSize={30} fontWeight="light">
           {formattedDate}
         </Typography>
-        <Grid item>
-          <Button onClick={onUpdatingNote}>
+        <Grid
+          container
+          sx={{
+            justifyContent: {
+              xs: "flex-start",
+              md: "flex-end",
+            },
+          }}
+        >
+          <IconButton
+            onClick={handleOnDeleteNote}
+            sx={{
+              "&:hover": {
+                color: "error.main",
+                transition: " color 0.2s ease",
+              },
+            }}
+          >
+            <DeleteOutlined />
+          </IconButton>
+          <input
+            type="file"
+            multiple
+            onChange={onFileInputChange}
+            style={{ display: "none" }}
+            ref={fileInputRef}
+          />
+          <IconButton
+            color="primary"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <UploadOutlined />
+          </IconButton>
+          <Button onClick={onUpdatingNote} disabled={!!savedMessage}>
             <SaveOutlined />
             <Typography ml={0.5} fontSize={14}>
               Save
@@ -67,7 +129,7 @@ export const NoteView = () => {
           />
         </Grid>
       </Grid>
-      <ImageGallery />
+      <ImageGallery images={activeNote.imageUrls} />
     </Grid>
   );
 };

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { formatString } from "../../helpers";
 
 export const journalSlice = createSlice({
   name: "journalSlice",
@@ -7,7 +8,7 @@ export const journalSlice = createSlice({
     savedMessage: "",
     notes: [],
     active: null,
-    imageUrls: [],
+
     /*  active:{
         id:"abc123",
         title:"",
@@ -24,7 +25,10 @@ export const journalSlice = createSlice({
     savingNewNote: (state) => {
       state.isSaving = true;
     },
-    deleteNoteById: (state, { payload }) => {},
+    deleteNoteById: (state, { payload }) => {
+      state.notes = state.notes.filter((note) => note.id !== payload);
+      state.active = null;
+    },
     updateNote: (state, { payload }) => {
       state.isSaving = false;
       state.notes = state.notes.map((note) => {
@@ -33,25 +37,43 @@ export const journalSlice = createSlice({
         }
         return note;
       });
+      state.savedMessage = `${formatString(
+        payload.title,
+        20
+      )} was saved successully`;
     },
     setSaving: (state) => {
       state.isSaving = true;
+      state.savedMessage = "";
     },
     setNotes: (state, { payload }) => {
       state.notes = payload;
     },
     setActiveNote: (state, { payload }) => {
       state.active = payload;
+      state.savedMessage = "";
     },
+    setPhotosUrlsToActiveNotes: (state, { payload }) => {
+      state.active.imageUrls = [...state.active.imageUrls, ...payload];
+      state.isSaving = false;
+    },
+  },
+  clearNotesLogout: (state) => {
+    (state.isSaving = false),
+      (state.savedMessage = ""),
+      (state.notes = []),
+      (state.active = null);
   },
 });
 
 export const {
   addNewEmptyNote,
+  clearNotesLogout,
   deleteNoteById,
-  updateNote,
-  setSaving,
-  setNotes,
-  setActiveNote,
   savingNewNote,
+  setActiveNote,
+  setNotes,
+  setPhotosUrlsToActiveNotes,
+  setSaving,
+  updateNote,
 } = journalSlice.actions;

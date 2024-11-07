@@ -1,7 +1,14 @@
 import { useMemo } from "react";
 /* eslint-disable react/no-unescaped-entities */
 import { Google } from "@mui/icons-material";
-import { Alert, Button, Grid, Link, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
@@ -19,7 +26,7 @@ export const LoginPage = () => {
   const dispatch = useDispatch();
   const { onInputChange, onResetForm, email, password } = useForm(formData);
   // const { status } = useSelector((state) => state.auth);
-  const { status ,errorMessage} = useSelector((state) => state.auth);
+  const { status, errorMessage } = useSelector((state) => state.auth);
   const isAuthenticating = useMemo(() => status === "Checking", [status]);
   const onSubmit = (event) => {
     event.preventDefault();
@@ -31,8 +38,8 @@ export const LoginPage = () => {
     dispatch(startGoogleSignIn());
   };
   const onLoginWithEmailAndPassword = () => {
-    dispatch(startLoginWithEmailAndPassword({email,password}))
-  }
+    dispatch(startLoginWithEmailAndPassword({ email, password }));
+  };
   return (
     <AuthLayout title="Login">
       <form

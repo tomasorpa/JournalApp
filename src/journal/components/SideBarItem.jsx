@@ -7,22 +7,22 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setActiveNote } from "../../store/journal/journalSlice";
-export const SideBarItem = ({ id,date,title, body }) => {
+import { formatString } from "../../helpers";
+import { setOpenFalse } from "../../store/journal/navBarSlice";
+export const SideBarItem = ({ id, date, title = "", body, imageUrls = [] }) => {
   // eslint-disable-next-line react/prop-types
-  const formattedTitle =
-    title.length > 17 ? `${title.substring(0, 12)}...` : title;
-    const formattedBody = body.length > 30 ? `${body.substring(0, 50)}...` : body;
-    
-    const dispatch=useDispatch()
-    const onSetActiveNote = () => {
-        dispatch(setActiveNote({id,date,title,body}))
-    }
+  const formattedTitle = formatString(title, 14);
+  const formattedBody = formatString(body, 30);
+
+  const dispatch = useDispatch();
+  const onSetActiveNote = () => {
+    dispatch(setActiveNote({ id, date, title, body, imageUrls }));
+    dispatch(setOpenFalse());
+  };
+
   return (
-    <ListItem
-      disablePadding
-     
-    >
-      <ListItemButton onClick={onSetActiveNote} >
+    <ListItem disablePadding>
+      <ListItemButton onClick={onSetActiveNote}>
         <ListItemIcon>
           <TurnedInNot />
         </ListItemIcon>

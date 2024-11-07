@@ -33,7 +33,7 @@ export const registerUserWithEmailAndPassword = async ({
       password
     );
     const { photoURL, uid } = user;
-    await updateProfile(FirebaseAuth.currentUser,{displayName})
+    await updateProfile(FirebaseAuth.currentUser, { displayName });
     return {
       isOk: true,
       email,
@@ -50,10 +50,14 @@ export const registerUserWithEmailAndPassword = async ({
     };
   }
 };
-export const loginWithEmailAndPassword = async({email,password}) => {
+export const loginWithEmailAndPassword = async ({ email, password }) => {
   try {
-    const { user } = await signInWithEmailAndPassword(FirebaseAuth, email, password)
-    const { photoURL, uid ,displayName } = user
+    const { user } = await signInWithEmailAndPassword(
+      FirebaseAuth,
+      email,
+      password
+    );
+    const { photoURL, uid, displayName } = user;
     return {
       isOk: true,
       email,
@@ -61,15 +65,15 @@ export const loginWithEmailAndPassword = async({email,password}) => {
       password,
       photoURL,
       uid,
-    }
+    };
   } catch (error) {
     return {
       isOk: false,
       errorMessage: error.message,
-      errorCode:error.code
-    }
+      errorCode: error.code,
+    };
   }
-}
+};
 export const logoutFirebase = async () => {
-  return await FirebaseAuth.signOut()
-}
+  return await FirebaseAuth.signOut();
+};
